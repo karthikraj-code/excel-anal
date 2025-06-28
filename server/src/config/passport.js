@@ -12,7 +12,7 @@ console.log('GITHUB_CLIENT_SECRET:', process.env.GITHUB_CLIENT_SECRET ? 'Set' : 
 
 // Get the base URL from environment variables
 const BASE_URL = process.env.NODE_ENV === 'production' 
-  ? process.env.PROD_API_URL 
+  ? process.env.PROD_API_URL.replace(/\/api$/, '')
   : process.env.API_URL || 'http://localhost:5000';
 
 // Serialize user

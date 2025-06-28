@@ -4,6 +4,8 @@ import { FaUser, FaEnvelope, FaUserTag, FaKey } from 'react-icons/fa';
 import { getProfile } from '../../store/slices/authSlice';
 import { toast } from 'react-hot-toast';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
 const Profile = () => {
   const dispatch = useDispatch();
   const { user, loading, error } = useSelector((state) => state.auth);
@@ -27,7 +29,7 @@ const Profile = () => {
       const formData = new FormData();
       formData.append('profilePicture', file);
       const token = localStorage.getItem('token');
-      const res = await fetch('/api/auth/profile-picture', {
+      const res = await fetch(`${API_URL}/auth/profile-picture`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`
@@ -84,7 +86,7 @@ const Profile = () => {
             <div className="relative">
               {user?.profilePicture ? (
                 <img
-                  src={user.profilePicture}
+                  src={`${API_URL.replace('/api', '')}${user.profilePicture}?t=${new Date().getTime()}`}
                   alt="Profile"
                   className="h-32 w-32 rounded-full object-cover border-4 border-blue-100 shadow-lg"
                 />
@@ -173,4 +175,4 @@ const Profile = () => {
   );
 };
 
-export default Profile; 
+export default Profile;
