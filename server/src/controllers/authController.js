@@ -302,14 +302,21 @@ exports.loginAdmin = async (req, res) => {
 exports.uploadProfilePicture = async (req, res) => {
   try {
     if (!req.file) {
+      console.log('No file uploaded in uploadProfilePicture');
       return res.status(400).json({ message: 'No file uploaded' });
     }
+    console.log('File received:', req.file);
     // Update user's profilePicture field
     const user = await User.findByIdAndUpdate(
       req.user._id,
       { profilePicture: `/uploads/${req.file.filename}` },
       { new: true, select: '-password' }
     );
+    if (!user) {
+      console.log('User not found for profile picture update:', req.user._id);
+      return res.status(404).json({ message: 'User not found' });
+    }
+    console.log('User profile picture updated:', user.profilePicture);
     res.json({ message: 'Profile picture updated', user });
   } catch (error) {
     res.status(500).json({ message: 'Error uploading profile picture', error: error.message });
